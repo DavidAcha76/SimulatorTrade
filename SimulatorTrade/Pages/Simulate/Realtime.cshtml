@@ -1,0 +1,37 @@
+@page
+@model SimulatorTrade.Pages.Simulate.RealtimeModel
+@{
+    ViewData["Title"] = "Tiempo real";
+}
+<h1>Simulación: Tiempo real</h1>
+<p class="muted">Recibe ticks de Binance (klines) y dibuja el precio de cierre en vivo.</p>
+<div class="card">
+  <div class="row"><label>Símbolo (desde config)</label><input value="@Model.Symbol" disabled /></div>
+  <div class="row"><label>Intervalo (desde config)</label><input value="@Model.Interval" disabled /></div>
+</div>
+
+<div class="card">
+  <h2>Ticker (realtime)</h2>
+  <canvas id="rtChart"></canvas>
+</div>
+
+@section Scripts {
+<script>
+const conn = new signalR.HubConnectionBuilder().withUrl('/hubs/market').build();
+let chart;
+function setup(){
+  const ctx = document.getElementById('rtChart').getContext('2d');
+  chart = new Chart(ctx, {type:'line', data:{labels:[], datasets:[{label:'Realtime', data:[]}]},
+    options:{animation:false, scales:{x:{display:false}}}});
+}
+conn.on('Tick', (tick)=>{
+  if (tick.mode !== 'realtime') return;
+  chart.data.labels.push(new Date(tick.time).toLocaleTimeString());
+  chart.data.datasets[0].data.push(tick.price);
+  if (chart.data.labels.length>200){chart.data.labels.shift(); chart.data.datasets[0].data.shift();}
+  chart.update();
+});
+conn.start().then(()=> conn.invoke('Join','realtime'));
+document.addEventListener('DOMContentLoaded', setup);
+</script>
+}

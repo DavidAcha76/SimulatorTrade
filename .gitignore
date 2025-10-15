@@ -1,0 +1,131 @@
+###############################
+# Visual Studio / .NET ignores
+###############################
+
+## Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+out/
+Debug/
+Release/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+.idea/
+
+# Rider project files
+*.sln.iml
+
+# NuGet packages
+*.nupkg
+*.snupkg
+*.nuspec
+*.psmdcp
+*.deps.json
+packages/
+# except build targets files
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# ASP.NET / EF Core artifacts
+wwwroot/lib/
+wwwroot/dist/
+wwwroot/node_modules/
+wwwroot/assets/
+appsettings.*.json
+secrets.json
+
+# Entity Framework Core
+Migrations/ # <-- Solo si generas desde 0 cada deploy, si no, quítalo
+*.db
+*.mdf
+*.ldf
+*.sqlite
+*.bak
+
+# Database backups and local dev DBs
+*.bak
+*.bak?
+*.trn
+*.log
+*.mdf
+*.ldf
+*.ndf
+*.db-shm
+*.db-wal
+*.sqlite3
+*.sqlite-journal
+
+# Configuration files with secrets
+.env
+.env.*
+appsettings.Development.json
+local.settings.json
+
+# Publish results
+publish/
+dist/
+build/
+_build/
+artifacts/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.trace
+*.pid
+*.seed
+*.pidb
+*.svclog
+*.scc
+
+# ReSharper files
+_ReSharper*/
+*.DotSettings.user
+
+# JetBrains Rider
+.idea/
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Mac / Linux
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+###############################
+# Node (if frontend build)
+###############################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+###############################
+# Logs / local runs
+###############################
+*.log
+logs/
+*.sqlite
+*.sqlite3
+*.db
+*.bak
+*.old

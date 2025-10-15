@@ -1,0 +1,43 @@
+@page
+@model SimulatorTrade.Pages.IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+<section class="grid two">
+  <div class="card">
+    <h2>Visor de precio</h2>
+    <p class="muted">Conéctate a tiempo real o playback desde las páginas de simulación.</p>
+    <canvas id="chart"></canvas>
+  </div>
+  <div class="card">
+    <h2>Estado</h2>
+    <ul>
+      <li>Símbolo: <strong id="symbol">—</strong></li>
+      <li>Último: <strong id="last">—</strong></li>
+      <li>Modo: <strong id="mode">—</strong></li>
+    </ul>
+  </div>
+</section>
+@section Scripts {
+<script>
+let chart;
+const ctx = document.getElementById('chart').getContext('2d');
+chart = new Chart(ctx, {type:'line', data:{labels:[], datasets:[{label:'Precio', data:[]}]},
+  options:{animation:false, scales:{x:{display:false}}}});
+
+function updateTick(tick){
+  document.getElementById('symbol').textContent = tick.symbol;
+  document.getElementById('last').textContent = Number(tick.price).toFixed(4);
+  document.getElementById('mode').textContent = tick.mode || 'realtime';
+  chart.data.labels.push(new Date(tick.time).toLocaleTimeString());
+  chart.data.datasets[0].data.push(tick.price);
+  if (chart.data.labels.length>200){chart.data.labels.shift(); chart.data.datasets[0].data.shift();}
+  chart.update();
+}
+
+// No unimos a ningún grupo aquí; esta página es solo demostrativa.
+const conn = new signalR.HubConnectionBuilder().withUrl('/hubs/market').build();
+conn.on('Tick', updateTick);
+conn.start();
+</script>
+}

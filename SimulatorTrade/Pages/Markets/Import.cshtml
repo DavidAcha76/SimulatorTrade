@@ -1,0 +1,14 @@
+@page
+@model SimulatorTrade.Pages.Markets.ImportModel
+@{
+    ViewData["Title"] = "Importar Histórico";
+}
+<h1>Importar Histórico</h1>
+<form method="post" class="card">
+  <div class="row"><label>Símbolo</label><input asp-for="Input.Symbol" /></div>
+  <div class="row"><label>Desde (UTC)</label><input asp-for="Input.From" type="datetime-local" /></div>
+  <div class="row"><label>Hasta (UTC)</label><input asp-for="Input.To" type="datetime-local" /></div>
+  <div class="row"><label>Intervalo</label><input asp-for="Input.Interval" /></div>
+  <button class="btn" type="submit">Importar</button>
+  @if (!string.IsNullOrWhiteSpace(Model.Message)){<p class="muted">@Model.Message</p>}
+</form>
