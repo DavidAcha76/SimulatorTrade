@@ -3,39 +3,112 @@
 @{
     ViewData["Title"] = "Viaje al pasado";
 }
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #0e1117;
+        color: #e0e6ed;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #c084fc;
+    }
+
+    .card {
+        background: #161b22;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #0d1117;
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    .row {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 5px;
+        color: #9ca3af;
+        font-weight: 600;
+    }
+
+    input {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        padding: 8px;
+        border-radius: 5px;
+        color: #e0e6ed;
+    }
+
+    .btn {
+        width: 100%;
+        background: linear-gradient(90deg, #9333ea, #c084fc);
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+    p.muted {
+        text-align: center;
+        color: #9ca3af;
+    }
+
+    canvas {
+        width: 100%;
+        height: 350px;
+    }
+</style>
+
 <h1>Simulación: Viaje al pasado</h1>
 <form method="post" class="card">
-  <div class="row"><label>Símbolo</label><input asp-for="Input.Symbol" /></div>
-  <div class="row"><label>Meses atrás</label><input asp-for="Input.MonthsBack" type="number" min="1" /></div>
-  <div class="row"><label>Intervalo</label><input asp-for="Input.Interval" value="1m" /></div>
-  <div class="row"><label>Velocidad x</label><input asp-for="Input.SpeedMultiplier" type="number" step="0.1" min="0.1" value="1" /></div>
-  <button class="btn" type="submit">Aplicar</button>
-  @if (!string.IsNullOrWhiteSpace(Model.Message)){<p class="muted">@Model.Message</p>}
+    <div class="row"><label>Símbolo</label><input asp-for="Input.Symbol" /></div>
+    <div class="row"><label>Meses atrás</label><input asp-for="Input.MonthsBack" type="number" min="1" /></div>
+    <div class="row"><label>Intervalo</label><input asp-for="Input.Interval" value="1m" /></div>
+    <div class="row"><label>Velocidad x</label><input asp-for="Input.SpeedMultiplier" type="number" step="0.1" min="0.1" value="1" /></div>
+    <button class="btn" type="submit">Aplicar</button>
+    @if (!string.IsNullOrWhiteSpace(Model.Message))
+    {
+        <p class="muted">@Model.Message</p>
+    }
 </form>
 
 <div class="card">
-  <h2>Ticker (playback)</h2>
-  <p>Únete al canal "playback" para recibir ticks históricos.</p>
-  <canvas id="pbChart"></canvas>
+    <h2>Ticker (playback)</h2>
+    <p>Únete al canal "playback" para recibir ticks históricos.</p>
+    <canvas id="pbChart"></canvas>
 </div>
 
 @section Scripts {
-<script>
-const conn = new signalR.HubConnectionBuilder().withUrl('/hubs/market').build();
-let chart;
-function setup(){
-  const ctx = document.getElementById('pbChart').getContext('2d');
-  chart = new Chart(ctx, {type:'line', data:{labels:[], datasets:[{label:'Playback', data:[]}]},
-    options:{animation:false, scales:{x:{display:false}}}});
-}
-conn.on('Tick', (tick)=>{
-  if (tick.mode !== 'playback') return;
-  chart.data.labels.push(new Date(tick.time).toLocaleTimeString());
-  chart.data.datasets[0].data.push(tick.price);
-  if (chart.data.labels.length>200){chart.data.labels.shift(); chart.data.datasets[0].data.shift();}
-  chart.update();
-});
-conn.start().then(()=> conn.invoke('Join','playback'));
-document.addEventListener('DOMContentLoaded', setup);
-</script>
+    <script>
+        const conn = new signalR.HubConnectionBuilder().withUrl('/hubs/market').build();
+        let chart;
+        function setup(){
+          const ctx = document.getElementById('pbChart').getContext('2d');
+          chart = new Chart(ctx, {type:'line', data:{labels:[], datasets:[{label:'Playback', borderColor:'#c084fc', backgroundColor:'rgba(192,132,252,0.1)', data:[]}]},
+            options:{animation:false, scales:{x:{display:false}, y:{ticks:{color:'#9ca3af'}}}}});
+        }
+        conn.on('Tick', (tick)=>{
+          if (tick.mode !== 'playback') return;
+          chart.data.labels.push(new Date(tick.time).toLocaleTimeString());
+          chart.data.datasets[0].data.push(tick.price);
+          if (chart.data.labels.length>200){chart.data.labels.shift(); chart.data.datasets[0].data.shift();}
+          chart.update();
+        });
+        conn.start().then(()=> conn.invoke('Join','playback'));
+        document.addEventListener('DOMContentLoaded', setup);
+    </script>
 }

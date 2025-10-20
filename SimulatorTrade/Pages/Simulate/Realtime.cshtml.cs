@@ -8,7 +8,7 @@ namespace SimulatorTrade.Pages.Simulate
         private readonly IConfiguration _cfg;
         public string Symbol { get; set; } = "BTCUSDT";
         public string Interval { get; set; } = "1m";
-        public RealtimeModel(IConfiguration cfg){ _cfg=cfg; }
+        public RealtimeModel(IConfiguration cfg) { _cfg = cfg; }
         public void OnGet()
         {
             Symbol = _cfg["DataProvider:Symbol"] ?? "BTCUSDT";

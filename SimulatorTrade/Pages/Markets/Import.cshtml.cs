@@ -10,7 +10,7 @@ namespace SimulatorTrade.Pages.Markets
     {
         private readonly AppDbContext _db;
         private readonly RealDataIngestor _ing;
-        public ImportModel(AppDbContext db, RealDataIngestor ing){ _db=db; _ing=ing; }
+        public ImportModel(AppDbContext db, RealDataIngestor ing) { _db = db; _ing = ing; }
 
         [BindProperty] public InputModel Input { get; set; } = new();
         public string Message { get; set; } = "";
@@ -23,12 +23,12 @@ namespace SimulatorTrade.Pages.Markets
             public string Interval { get; set; } = "1m";
         }
 
-        public void OnGet(){}
+        public void OnGet() { }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var asset = await _db.Assets.FirstOrDefaultAsync(a=>a.Symbol==Input.Symbol);
-            if (asset == null){ asset = new Models.Asset{ Symbol=Input.Symbol, Name=Input.Symbol }; _db.Assets.Add(asset); await _db.SaveChangesAsync(); }
+            var asset = await _db.Assets.FirstOrDefaultAsync(a => a.Symbol == Input.Symbol);
+            if (asset == null) { asset = new Models.Asset { Symbol = Input.Symbol, Name = Input.Symbol }; _db.Assets.Add(asset); await _db.SaveChangesAsync(); }
             var rows = await _ing.ImportAsync(asset.Id, Input.Symbol, Input.From, Input.To, Input.Interval);
             Message = $"Importadas {rows} velas para {Input.Symbol} ({Input.Interval}).";
             return Page();

@@ -3,12 +3,85 @@
 @{
     ViewData["Title"] = "Importar Histórico";
 }
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #0e1117;
+        color: #e0e6ed;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #10b981;
+    }
+
+    .card {
+        background: #161b22;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #0d1117;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .row {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        color: #9ca3af;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    input {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        color: #e0e6ed;
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+        input:focus {
+            border-color: #10b981;
+            outline: none;
+        }
+
+    .btn {
+        width: 100%;
+        background: #10b981;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+        .btn:hover {
+            background: #0e9e73;
+        }
+
+    p.muted {
+        text-align: center;
+        color: #9ca3af;
+    }
+</style>
+
 <h1>Importar Histórico</h1>
 <form method="post" class="card">
-  <div class="row"><label>Símbolo</label><input asp-for="Input.Symbol" /></div>
-  <div class="row"><label>Desde (UTC)</label><input asp-for="Input.From" type="datetime-local" /></div>
-  <div class="row"><label>Hasta (UTC)</label><input asp-for="Input.To" type="datetime-local" /></div>
-  <div class="row"><label>Intervalo</label><input asp-for="Input.Interval" /></div>
-  <button class="btn" type="submit">Importar</button>
-  @if (!string.IsNullOrWhiteSpace(Model.Message)){<p class="muted">@Model.Message</p>}
+    <div class="row"><label>Símbolo</label><input asp-for="Input.Symbol" /></div>
+    <div class="row"><label>Desde (UTC)</label><input asp-for="Input.From" type="datetime-local" /></div>
+    <div class="row"><label>Hasta (UTC)</label><input asp-for="Input.To" type="datetime-local" /></div>
+    <div class="row"><label>Intervalo</label><input asp-for="Input.Interval" /></div>
+    <button class="btn" type="submit">Importar</button>
+    @if (!string.IsNullOrWhiteSpace(Model.Message))
+    {
+        <p class="muted">@Model.Message</p>
+    }
 </form>

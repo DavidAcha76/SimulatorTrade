@@ -12,7 +12,7 @@ namespace SimulatorTrade.Pages.Simulate
         private readonly SimulationState _state;
         private readonly RealDataIngestor _ing;
 
-        public PlaybackModel(AppDbContext db, SimulationState state, RealDataIngestor ing){ _db=db; _state=state; _ing=ing; }
+        public PlaybackModel(AppDbContext db, SimulationState state, RealDataIngestor ing) { _db = db; _state = state; _ing = ing; }
         [BindProperty] public InputModel Input { get; set; } = new();
         public string Message { get; set; } = "";
 
@@ -24,13 +24,13 @@ namespace SimulatorTrade.Pages.Simulate
             public double SpeedMultiplier { get; set; } = 1.0;
         }
 
-        public void OnGet(){}
+        public void OnGet() { }
 
         public async Task<IActionResult> OnPostAsync()
         {
             // Ensure asset and historical data exist
-            var asset = await _db.Assets.FirstOrDefaultAsync(a=>a.Symbol==Input.Symbol);
-            if (asset == null){ asset = new Models.Asset{ Symbol=Input.Symbol, Name=Input.Symbol }; _db.Assets.Add(asset); await _db.SaveChangesAsync(); }
+            var asset = await _db.Assets.FirstOrDefaultAsync(a => a.Symbol == Input.Symbol);
+            if (asset == null) { asset = new Models.Asset { Symbol = Input.Symbol, Name = Input.Symbol }; _db.Assets.Add(asset); await _db.SaveChangesAsync(); }
             var from = DateTime.UtcNow.AddMonths(-Input.MonthsBack).AddDays(-7);
             var to = DateTime.UtcNow.AddMonths(-Input.MonthsBack).AddDays(7);
             var count = await _ing.ImportAsync(asset.Id, Input.Symbol, from, to, Input.Interval);

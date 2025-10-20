@@ -3,35 +3,94 @@
 @{
     ViewData["Title"] = "Tiempo real";
 }
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #0e1117;
+        color: #e0e6ed;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #58a6ff;
+    }
+
+    p.muted {
+        text-align: center;
+        color: #9ca3af;
+    }
+
+    .card {
+        background: #161b22;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px auto;
+        max-width: 650px;
+        box-shadow: 0 0 10px #0d1117;
+    }
+
+    .row {
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #9ca3af;
+    }
+
+    input {
+        background: #0d1117;
+        border: 1px solid #30363d;
+        color: #e0e6ed;
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+        input:disabled {
+            background: #20262d;
+        }
+
+    canvas {
+        width: 100%;
+        height: 350px;
+    }
+</style>
+
 <h1>Simulación: Tiempo real</h1>
 <p class="muted">Recibe ticks de Binance (klines) y dibuja el precio de cierre en vivo.</p>
+
 <div class="card">
-  <div class="row"><label>Símbolo (desde config)</label><input value="@Model.Symbol" disabled /></div>
-  <div class="row"><label>Intervalo (desde config)</label><input value="@Model.Interval" disabled /></div>
+    <div class="row"><label>Símbolo (desde config)</label><input value="@Model.Symbol" disabled /></div>
+    <div class="row"><label>Intervalo (desde config)</label><input value="@Model.Interval" disabled /></div>
 </div>
 
 <div class="card">
-  <h2>Ticker (realtime)</h2>
-  <canvas id="rtChart"></canvas>
+    <h2>Ticker (realtime)</h2>
+    <canvas id="rtChart"></canvas>
 </div>
 
 @section Scripts {
-<script>
-const conn = new signalR.HubConnectionBuilder().withUrl('/hubs/market').build();
-let chart;
-function setup(){
-  const ctx = document.getElementById('rtChart').getContext('2d');
-  chart = new Chart(ctx, {type:'line', data:{labels:[], datasets:[{label:'Realtime', data:[]}]},
-    options:{animation:false, scales:{x:{display:false}}}});
-}
-conn.on('Tick', (tick)=>{
-  if (tick.mode !== 'realtime') return;
-  chart.data.labels.push(new Date(tick.time).toLocaleTimeString());
-  chart.data.datasets[0].data.push(tick.price);
-  if (chart.data.labels.length>200){chart.data.labels.shift(); chart.data.datasets[0].data.shift();}
-  chart.update();
-});
-conn.start().then(()=> conn.invoke('Join','realtime'));
-document.addEventListener('DOMContentLoaded', setup);
-</script>
+    <script>
+        const conn = new signalR.HubConnectionBuilder().withUrl('/hubs/market').build();
+        let chart;
+        function setup(){
+          const ctx = document.getElementById('rtChart').getContext('2d');
+          chart = new Chart(ctx, {type:'line', data:{labels:[], datasets:[{label:'Realtime', borderColor:'#58a6ff', backgroundColor:'rgba(88,166,255,0.1)', data:[]}]},
+            options:{animation:false, scales:{x:{display:false}, y:{ticks:{color:'#9ca3af'}}}}});
+        }
+        conn.on('Tick', (tick)=>{
+          if (tick.mode !== 'realtime') return;
+          chart.data.labels.push(new Date(tick.time).toLocaleTimeString());
+          chart.data.datasets[0].data.push(tick.price);
+          if (chart.data.labels.length>200){chart.data.labels.shift(); chart.data.datasets[0].data.shift();}
+          chart.update();
+        });
+        conn.start().then(()=> conn.invoke('Join','realtime'));
+        document.addEventListener('DOMContentLoaded', setup);
+    </script>
 }

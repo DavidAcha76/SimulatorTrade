@@ -4,27 +4,100 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>@title</title>
-  <link rel="stylesheet" href="~/css/site.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0e1117;
+            color: #e0e6ed;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav {
+            background: #161b22;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 30px;
+            box-shadow: 0 2px 8px #0d1117;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .logo {
+            color: #00bfa6;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 20px;
+            transition: color 0.2s;
+        }
+
+            .logo:hover {
+                color: #00a58d;
+            }
+
+        .links a {
+            color: #e0e6ed;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+            .links a:hover {
+                color: #00bfa6;
+            }
+
+        .container {
+            padding: 40px 20px;
+            min-height: 80vh;
+        }
+
+        .footer {
+            background: #161b22;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+            padding: 15px;
+            border-top: 1px solid #30363d;
+        }
+
+
+        {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .links a {
+            margin: 8px 0;
+        }
+
+        }</style>
 </head>
+
 <body>
-  <header class="nav">
-    <a class="logo" asp-page="/Index">SimulatorTrade</a>
-    <nav class="links">
-      <a asp-page="/Index">Inicio</a>
-      <a asp-page="/Simulate/Playback">Viaje al pasado</a>
-      <a asp-page="/Simulate/Realtime">Tiempo real</a>
-      <a asp-page="/Markets/Import">Importar histórico</a>
-    </nav>
-  </header>
-  <main class="container">
-    @RenderBody()
-  </main>
-  <footer class="footer">Simulador de trading — SQL Server + Razor Pages</footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
-  @RenderSection("Scripts", required:false)
+    <header class="nav">
+        <a class="logo" asp-page="/Index">SimulatorTrade</a>
+        <nav class="links">
+            <a asp-page="/Index">Inicio</a>
+            <a asp-page="/Simulate/Playback">Viaje al pasado</a>
+            <a asp-page="/Simulate/Realtime">Tiempo real</a>
+            <a asp-page="/Markets/Import">Importar histórico</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        @RenderBody()
+    </main>
+
+    <footer class="footer">Simulador de trading — SQL Server + Razor Pages</footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
